@@ -1,4 +1,5 @@
 from misskey import Misskey
+from misskey.exceptions import MisskeyAPIException
 from urllib.parse import urlparse
 from sys import exit
 from requests.exceptions import InvalidURL, ConnectionError
@@ -43,9 +44,14 @@ while True:
             # ノートのIDが空でないか確認
             if note[2] != "":
                 # ノートのIDを変数に格納
-                note_ = note[2]
-                break
-    print("ノートのURLを入力してください")
+                note = note[2]
+                # ノートが存在するか確認
+                try:
+                    mk.notes_show(note).get("error")
+                    break
+                except MisskeyAPIException:
+                    print("ノートが存在しません")
+    print("正しいノートのURLを入力してください")
 
 # 抽選の条件を指定
 while True:
