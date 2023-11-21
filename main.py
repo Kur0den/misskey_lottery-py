@@ -44,11 +44,11 @@ while True:
 
 print("-" * 20)
 print("抽選条件")
-print("リアクション: " + ("必要" if is_react else "なし"))
-print("リノート: " + ("必要" if is_renote else "なし"))
-print("フォロー: " + ("必要" if is_follow else "なし"))
-print("リプライ: " + ("必要" if is_reply else "なし"))
-print("抽選人数: " + str(pickup))
+print("リアクション: " + ("必要" if is_react else "不要"))
+print("リノート: " + ("必要" if is_renote else "不要"))
+print("フォロー: " + ("必要" if is_follow else "不要"))
+print("リプライ: " + ("必要" if is_reply else "不要"))
+print("抽選人数: " + str(pickup) + "人")
 
 if not check("これでよろしいですか？(Y/n): "):
     print("処理を中断しました")
