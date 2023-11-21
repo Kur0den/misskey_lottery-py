@@ -46,8 +46,8 @@ while True:
 # 抽選人数
 while True:
     try:
-        pickup = int(input("何人を選びますか？: "))
-        if pickup > 0:
+        num_pickup = int(input("何人を選びますか？: "))
+        if num_pickup > 0:
             break
         print("1以上の数字を入力してください")
     except ValueError:
@@ -59,7 +59,7 @@ print("リアクション: " + ("必要" if is_react else "不要"))
 print("リノート: " + ("必要" if is_renote else "不要"))
 print("フォロー: " + ("必要" if is_follow else "不要"))
 print("リプライ: " + ("必要" if is_reply else "不要"))
-print("抽選人数: " + str(pickup) + "人")
+print("抽選人数: " + str(num_pickup) + "人")
 
 if not check("これでよろしいですか？(Y/n): "):
     print("処理を中断しました")
