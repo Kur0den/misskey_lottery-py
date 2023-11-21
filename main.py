@@ -56,9 +56,9 @@ while True:
         num_pickup = int(input("何人を選びますか？: "))
         if num_pickup > 0:
             break
-        print("1以上の数字を入力してください")
+        print("1以上の整数を入力してください")
     except ValueError:
-        print("数字を入力してください")
+        print("整数を入力してください")
 
 print("-" * 20)
 print("抽選条件")
