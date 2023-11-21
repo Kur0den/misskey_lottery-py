@@ -1,7 +1,6 @@
 from misskey import Misskey
 from urllib import parse
 from sys import exit
-from requests import exceptions as req_exceptions
 
 
 def check(prompt):
@@ -13,21 +12,11 @@ def check(prompt):
 
 
 # ノートのURLを取得
-while True:
-    # URLとして認識できるか確認
-    try:
-        note_url = input("ノートのURLを入力してください: ")
-        mk = Misskey(parse.urlparse(note_url).netloc)
-        # ノートのURLかどうかを確認
-        if parse.urlparse(note_url).path.split("/")[1] != "notes":
-            print("ノートのURLを入力してください")
-            continue
-        break
-    except req_exceptions.InvalidURL:
-        print("URLとして認識できませんでした\n正しいノートのURLを入力してください")
+note_url = input("ノートのURLを入力してください: ")
+mk = Misskey(parse.urlparse(note_url).netloc)
 
-# 抽選の条件を指定
 while True:
+    # 抽選の条件を指定
     # リアクション
     is_react = check("リアクションを抽選の条件に加えますか？(Y/n): ")
     # リノート
@@ -46,8 +35,8 @@ while True:
 # 抽選人数
 while True:
     try:
-        num_pickup = int(input("何人を選びますか？: "))
-        if num_pickup > 0:
+        pickup = int(input("何人を選びますか？: "))
+        if pickup > 0:
             break
         print("1以上の数字を入力してください")
     except ValueError:
@@ -59,14 +48,9 @@ print("リアクション: " + ("必要" if is_react else "不要"))
 print("リノート: " + ("必要" if is_renote else "不要"))
 print("フォロー: " + ("必要" if is_follow else "不要"))
 print("リプライ: " + ("必要" if is_reply else "不要"))
-print("抽選人数: " + str(num_pickup) + "人")
+print("抽選人数: " + str(pickup) + "人")
 
 if not check("これでよろしいですか？(Y/n): "):
     print("処理を中断しました")
     exit()
 print("抽選を開始します")
-
-# 抽選の実行
-# ノートの情報を取得
-print(parse.urlparse(note_url).path.split("/")[2])
-# note = mk.notes_show()
