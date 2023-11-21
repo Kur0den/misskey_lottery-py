@@ -4,7 +4,16 @@ from sys import exit
 from requests.exceptions import InvalidURL, ConnectionError
 
 
-def check(prompt):
+def check(prompt: str) -> bool:
+    """
+    Function to display a prompt asking the user yes or no and return the result.
+
+    Args:
+        prompt (str): The prompt to display.
+
+    Returns:
+        bool: True if the user answered yes, False if the user answered no.
+    """
     while True:
         try:
             return {"y": True, "n": False}[input(prompt).lower()]
@@ -14,27 +23,32 @@ def check(prompt):
 
 # ノートのURLを取得
 while True:
-    # URLが正しくパースできるか確認
     try:
         note = input("ノートのURLを入力してください: ")
+        # misskey.pyのMisskeyクラスのインスタンスを生成
         mk = Misskey(urlparse(note).netloc)
+    # URLが正しくパースできない場合
+    # ドメインが存在しない場合は入力をやり直す
     except (InvalidURL, ConnectionError):
         print("URLが正しくありません")
         continue
 
+    # URLが正しくパースできるか確認
     # ノートのURLかどうか確認
     # URLのPathが空でないか確認
     note = urlparse(note).path.split("/")
     if len(note) == 3:
         # Pathの先頭が"/notes"か確認
         if note[1] == "notes":
+            # ノートのIDが空でないか確認
             if note[2] != "":
+                # ノートのIDを変数に格納
                 note_ = note[2]
                 break
     print("ノートのURLを入力してください")
 
+# 抽選の条件を指定
 while True:
-    # 抽選の条件を指定
     # リアクション
     is_react = check("リアクションを抽選の条件に加えますか？(Y/n): ")
     # リノート
@@ -52,14 +66,17 @@ while True:
 
 # 抽選人数
 while True:
+    # 入力が整数か確認
     try:
         num_pickup = int(input("何人を選びますか？: "))
+        # 1以上の整数か確認
         if num_pickup > 0:
             break
         print("1以上の整数を入力してください")
     except ValueError:
         print("整数を入力してください")
 
+# 抽選条件を表示
 print("-" * 20)
 print("抽選条件")
 print("リアクション: " + ("必要" if is_react else "不要"))
@@ -68,6 +85,7 @@ print("フォロー: " + ("必要" if is_follow else "不要"))
 print("リプライ: " + ("必要" if is_reply else "不要"))
 print("抽選人数: " + str(num_pickup) + "人")
 
+# 抽選を開始するか確認
 if not check("これでよろしいですか？(Y/n): "):
     print("処理を中断しました")
     exit()
