@@ -1,6 +1,4 @@
 from misskey import Misskey
-import uuid
-import json
 from urllib import parse
 
 # ノートのURLを取得
