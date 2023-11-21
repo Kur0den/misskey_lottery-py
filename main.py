@@ -1,6 +1,7 @@
 from misskey import Misskey
 from urllib import parse
 from sys import exit
+from requests import exceptions as req_exceptions
 
 
 def check(prompt):
@@ -12,11 +13,21 @@ def check(prompt):
 
 
 # ノートのURLを取得
-note_url = input("ノートのURLを入力してください: ")
-mk = Misskey(parse.urlparse(note_url).netloc)
-
 while True:
-    # 抽選の条件を指定
+    # URLとして認識できるか確認
+    try:
+        note_url = input("ノートのURLを入力してください: ")
+        mk = Misskey(parse.urlparse(note_url).netloc)
+        # ノートのURLかどうかを確認
+        if parse.urlparse(note_url).path.split("/")[1] != "notes":
+            print("ノートのURLを入力してください")
+            continue
+        break
+    except req_exceptions.InvalidURL:
+        print("URLとして認識できませんでした\n正しいノートのURLを入力してください")
+
+# 抽選の条件を指定
+while True:
     # リアクション
     is_react = check("リアクションを抽選の条件に加えますか？(Y/n): ")
     # リノート
@@ -54,3 +65,8 @@ if not check("これでよろしいですか？(Y/n): "):
     print("処理を中断しました")
     exit()
 print("抽選を開始します")
+
+# 抽選の実行
+# ノートの情報を取得
+print(parse.urlparse(note_url).path.split("/")[2])
+# note = mk.notes_show()
