@@ -1,6 +1,7 @@
 from misskey import Misskey
-from urllib import parse
+from urllib.parse import urlparse
 from sys import exit
+from requests.exceptions import InvalidURL, ConnectionError
 
 
 def check(prompt):
@@ -12,8 +13,25 @@ def check(prompt):
 
 
 # ノートのURLを取得
-note_url = input("ノートのURLを入力してください: ")
-mk = Misskey(parse.urlparse(note_url).netloc)
+while True:
+    # URLが正しくパースできるか確認
+    try:
+        note = input("ノートのURLを入力してください: ")
+        mk = Misskey(urlparse(note).netloc)
+    except (InvalidURL, ConnectionError):
+        print("URLが正しくありません")
+        continue
+
+    # ノートのURLかどうか確認
+    # URLのPathが空でないか確認
+    note = urlparse(note).path.split("/")
+    if len(note) == 3:
+        # Pathの先頭が"/notes"か確認
+        if note[1] == "notes":
+            if note[2] != "":
+                note_ = note[2]
+                break
+    print("ノートのURLを入力してください")
 
 while True:
     # 抽選の条件を指定
